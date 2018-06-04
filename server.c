@@ -25,7 +25,7 @@
 #define MAXLINE         99999
 #define BUFSIZE         4096
 
-#define CLOUD_ROOT      "/home/min/Cloud/" // modify for server environment
+#define CLOUD_ROOT      "/home/ubuntu/Cloud/" // modify for server environment
 
 typedef enum { LIST, UPLOAD, DOWNLOAD, REMOVE, PRIVATE, SHARE, EXIT } command_t;
 
