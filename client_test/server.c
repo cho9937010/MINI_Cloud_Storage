@@ -23,7 +23,7 @@
 #define PATH_BUFLEN     30
 #define PARAM_BUFLEN    40
 #define MAXLINE         99999
-#define BUFSIZE         4096
+#define BUFSIZE         99999
 
 #define CLOUD_ROOT      "/home/cho99/Cloud/" // modify for server environment
 
@@ -86,8 +86,8 @@ int main()
             error_handling("accept() error");
 
         // print ip and fd
-        //fputs(inet_ntoa(client_addr.sin_addr), stdout);
-        //printf(" connected to %d\n", client_sock);
+        fputs(inet_ntoa(client_addr.sin_addr), stdout);
+        printf(" connected to %d\n", client_sock);
 
         // fork()
         if ((pid = fork()) == -1)
@@ -104,7 +104,7 @@ int main()
                 close(client_sock);
                 exit(0);
             }
-            //printf("[%s] fd: %d\n", id, client_sock);
+            printf("[%s] fd: %d\n", id, client_sock);
 
             // access user's directory
             strcpy(path, CLOUD_ROOT);
@@ -129,7 +129,7 @@ int main()
 
                 // exit branch
                 if (command == EXIT) {
-                    printf("user exit\n");
+                    printf("[%s] user exit\n", id);
                     break;
                 }
 
@@ -153,7 +153,7 @@ int main()
                         strcat(msg, tmp);
                         strcat(msg, "\n");
                       }
-                      //printf("%s", msg);
+                      printf("%s", msg);
                       retval = write(client_sock, msg, sizeof(msg));
                       if(retval == -1){
                         error_handling("-->파일 이름 전송 실패");
@@ -164,7 +164,7 @@ int main()
                     /* 데이터 전송후 소켓의 일부(전송영역)를 닫음 */
                     if( shutdown(client_sock, SHUT_WR) == -1 )
                         error_handling("shutdown error");
-                    printf("-->클라이언트에게 파일 리스트 전송 완료!\n\n");
+                    printf("-->클라이언트에게 파일 리스트 전송 완료!\n");
                     break;
 
                 case UPLOAD:   // upload
@@ -201,7 +201,7 @@ int main()
                      }
 
                 		fclose(fp);
-                    printf("서버에 파일 업로드 완료!\n\n");
+                    printf("서버에 파일 업로드 완료!\n");
                     break;
 
                 case DOWNLOAD:   // download
@@ -248,7 +248,7 @@ int main()
                     if( shutdown(client_sock, SHUT_WR) == -1 )
                         error_handling("shutdown error");
 
-                    printf("클라이언트에게 파일 전송 완료!\n\n");
+                    printf("클라이언트에게 파일 전송 완료!\n");
                     break;
 
                 case REMOVE:   // remove
@@ -274,6 +274,7 @@ int main()
 
                 // 각 명령어 끝날 때마다 다시 연결
                 close(client_sock);
+                printf("연결 해제");
             }
 
             // child process terminates
